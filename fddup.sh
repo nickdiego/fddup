@@ -28,15 +28,10 @@ DST_HASHES_FILE="${TMP_DIR}/$(sed 's,/,_,g' <<< $DST_DIR).txt"
 find $SRC_DIR -type f | xargs md5sum | sort > $SRC_HASHES_FILE
 find $DST_DIR -type f | xargs md5sum | sort > $DST_HASHES_FILE
 
-comm -12 \
-  <(cut -f1 -d ' ' < ${SRC_HASHES_FILE}) \
-  <(cut -f1 -d ' ' < ${DST_HASHES_FILE}) > $DUP_HASHES_FILE
-
-REGEX=$(tr '\n' '|' < $DUP_HASHES_FILE | head -c -1)
-
+join -j1 $SRC_HASHES_FILE $DST_HASHES_FILE > $DUP_HASHES_FILE
 
 echo -ne "############# Duplicated files found:\n\n" >&2
-egrep --color=never "$REGEX" $DST_HASHES_FILE | awk '{print $2}'
+cat $DUP_HASHES_FILE
 echo >&2
 
 (( DBG )) && print_debug_info >&2
