@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 
 if [ $# -lt 2 ]; then
   echo "usage: $0 <src_dir> <dest_dir>" >&2
