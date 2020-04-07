@@ -25,12 +25,16 @@ DUP_HASHES_FILE="${TMP_DIR}/dup_hashes.txt"
 SRC_HASHES_FILE="${TMP_DIR}/$(sed 's,/,_,g' <<< $SRC_DIR).txt"
 DST_HASHES_FILE="${TMP_DIR}/$(sed 's,/,_,g' <<< $DST_DIR).txt"
 
+echo "Indexing $SRC_DIR..." >&2
 find $SRC_DIR -type f | xargs md5sum | sort > $SRC_HASHES_FILE
+
+echo "Indexing $DST_DIR..." >&2
 find $DST_DIR -type f | xargs md5sum | sort > $DST_HASHES_FILE
 
+echo "Finding dups..." >&2
 join -j1 $SRC_HASHES_FILE $DST_HASHES_FILE > $DUP_HASHES_FILE
 
-echo -ne "############# Duplicated files found:\n\n" >&2
+echo -ne "\n### Duplicated files found:\n\n" >&2
 cat $DUP_HASHES_FILE
 echo >&2
 
