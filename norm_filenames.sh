@@ -1,16 +1,18 @@
 #!/bin/bash
 
-DIR=$1
+# Usage sample:
+#
+# find test/odd-filenames -type f | ./norm_filenames.sh
 
 regex='s,^.\+\(Aula .\+\.mp4\).\+$,\1,g'
 dry=${dry:-1}
 
-for f in ${DIR}/*; do
-  if (( dry )); then
-    echo "mv -v '$f' '${DIR}/$(echo "$f" | sed "$regex" | tr ' '  '_')'"
-  else
-    eval "mv -v '$f' '${DIR}/$(echo "$f" | sed "$regex" | tr ' '  '_')'"
-  fi
+while IFS= read -r f; do
+  dir="$(dirname "$f")"
+  new_name="$(echo "$f" | sed "$regex")"
+  cmd="mv '$f' '${dir}/${new_name}'"
+
+  (( dry )) && echo $cmd || eval $cmd
 done
 
 # vim: ts=2 sw=4 et filetype=sh
