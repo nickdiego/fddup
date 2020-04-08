@@ -7,9 +7,9 @@ dry=${dry:-1}
 
 for f in ${DIR}/*; do
   if (( dry )); then
-    echo "mv -v '$f' '$(echo "$f" | sed "$regex" | tr ' '  '_')'"
+    echo "mv -v '$f' '${DIR}/$(echo "$f" | sed "$regex" | tr ' '  '_')'"
   else
-    eval "mv -v '$f' '$(echo "$f" | sed "$regex" | tr ' '  '_')'"
+    eval "mv -v '$f' '${DIR}/$(echo "$f" | sed "$regex" | tr ' '  '_')'"
   fi
 done
 
