@@ -26,10 +26,10 @@ SRC_HASHES_FILE="${TMP_DIR}/$(sed 's,/,_,g' <<< $SRC_DIR).txt"
 DST_HASHES_FILE="${TMP_DIR}/$(sed 's,/,_,g' <<< $DST_DIR).txt"
 
 echo "Indexing $SRC_DIR..." >&2
-find $SRC_DIR -type f | xargs md5sum -b | sort > $SRC_HASHES_FILE
+find $SRC_DIR -type f -print0 | xargs -0 md5sum -b | sort > $SRC_HASHES_FILE
 
 echo "Indexing $DST_DIR..." >&2
-find $DST_DIR -type f | xargs md5sum -b | sort > $DST_HASHES_FILE
+find $DST_DIR -type f -print0 | xargs -0 md5sum -b | sort > $DST_HASHES_FILE
 
 echo "Finding dups..." >&2
 join -j1 $SRC_HASHES_FILE $DST_HASHES_FILE > $DUP_HASHES_FILE
